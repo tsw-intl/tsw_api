@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Weekendy, WeekendyDocument } from './schemas/weekendy.schema';
-import { Model, Schema as MongooseSchema } from 'mongoose';
+import { Model, Schema as MongooseSchema, Types } from 'mongoose';
 import { CreateWeekendyDto } from './dto/create-weekendy.dto';
 import { UpdateWeekendyDto } from './dto/update-weekendy.dto';
 import { ProduitService } from 'src/produit/produit.service';
@@ -1175,16 +1175,30 @@ export class WeekendyService {
   }
 
   async findAll(bureauId: string) {
-    console.log(bureauId);
-    const weekendy = await this.weekendyModel
-      .find({ bureauId: bureauId })
-      // .populate('bureauId')
-      // .populate('mois')
-      // .populate('annee')
-      .exec();
-      console.log(weekendy);
-
-    return weekendy;
+    if (!bureauId) {
+      throw new Error('bureauId est requis');
+    }
+  
+    console.log('bureauId reçu:', bureauId);
+  
+    try {
+      // Conversion en ObjectId
+      const objectId = new Types.ObjectId(bureauId);
+  
+      const weekendy = await this.weekendyModel
+        .find({ bureauId: objectId }) // Utilisation de l'ObjectId
+        .populate('bureauId')
+        .populate('mois')
+        .populate('annee')
+        .exec();
+  
+      console.log('Données récupérées:', weekendy);
+  
+      return weekendy;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des week-end:', error);
+      throw new Error('Impossible de récupérer les données');
+    }
   }
 
   async findAllVenteDocteur(bureauId: string) {
