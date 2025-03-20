@@ -1178,9 +1178,9 @@ export class WeekendyService {
     console.log(bureauId);
     const weekendy = await this.weekendyModel
       .find({ bureauId: bureauId })
-      .populate('bureauId')
-      .populate('mois')
-      .populate('annee')
+      // .populate('bureauId')
+      // .populate('mois')
+      // .populate('annee')
       .exec();
 
     return weekendy;
