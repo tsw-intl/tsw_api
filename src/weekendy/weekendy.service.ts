@@ -1182,6 +1182,7 @@ export class WeekendyService {
       // .populate('mois')
       // .populate('annee')
       .exec();
+      console.log(weekendy);
 
     return weekendy;
   }
