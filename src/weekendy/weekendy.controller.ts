@@ -14,11 +14,13 @@ export class WeekendyController {
   constructor(private readonly weekendyService: WeekendyService) {}
 
   @Post('newWeekendy/:id')
-  create(@Param('id') id: string, @Body() createWeekendyDto: CreateWeekendyDto){
+  create(
+    @Param('id') id: string,
+    @Body() createWeekendyDto: CreateWeekendyDto,
+  ) {
     // console.log(createWeekendyDto);
     createWeekendyDto.bureauId = id;
     createWeekendyDto.createdAt = Date();
-    
     return this.weekendyService.create(createWeekendyDto);
   }
 

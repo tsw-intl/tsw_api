@@ -893,6 +893,8 @@ export class WeekendyService {
   }
 
   async findAllVenteDocteur(bureauId: string) {
+
+    console.log(bureauId);
     const weekendy = await this.weekendyDocteurModel
                                 .find({bureauId: bureauId})
                                 .populate('bureauId')
