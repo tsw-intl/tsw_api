@@ -32,6 +32,7 @@ export class WeekendyController {
   @Put('update-all')
   async updateAllData() {
     try {
+      
       const updatedData = await this.weekendyService.updateAllData();
       return { status: 'success', data: updatedData };
     } catch (error) {
