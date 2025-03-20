@@ -10,7 +10,7 @@ import { SalairekineDTO } from './dto/salairedoctor.dto';
 
 @Controller('weekendy')
 export class WeekendyController {
-  
+
   constructor(private readonly weekendyService: WeekendyService) {}
 
   @Post('newWeekendy/:id')
@@ -22,6 +22,16 @@ export class WeekendyController {
     createWeekendyDto.bureauId = id;
     createWeekendyDto.createdAt = Date();
     return this.weekendyService.create(createWeekendyDto);
+  }
+
+  @Get('convert-objectid')
+  async convertFields() {
+    return this.weekendyService.convertFieldToObjectId();
+  }
+
+  @Get('convert-id')
+  async convertId() {
+    return this.weekendyService.convertIdToObjectId();
   }
 
   @Post('newWeekendytsw')

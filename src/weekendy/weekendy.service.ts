@@ -907,6 +907,73 @@ export class WeekendyService {
       }
     }
   }
+
+  async convertIdToObjectId() {
+    try {
+      // Récupérer les documents où _id est une chaîne de caractères
+      const documents = await this.weekendyModel.find({
+        _id: { $type: 'string' },
+      });
+
+      for (const doc of documents) {
+        const objectId = new Types.ObjectId(doc._id);
+
+        // Insérer un nouveau document avec le bon _id
+        await this.weekendyModel.create({ ...doc.toObject(), _id: objectId });
+
+        // Supprimer l'ancien document avec _id en string
+        await this.weekendyModel.deleteOne({ _id: doc._id });
+      }
+
+      return {
+        message: 'Conversion des _id en ObjectId terminée avec succès !',
+      };
+    } catch (error) {
+      console.error('Erreur lors de la conversion des _id :', error);
+      throw error;
+    }
+  }
+
+  async convertFieldToObjectId() {
+    try {
+      // Récupérer tous les enregistrements où le champ est une chaîne de caractères
+      const documents = await this.weekendyModel.find({
+        $or: [
+          { bureauId: { $type: 'string' } },
+          { mois: { $type: 'string' } },
+          { annee: { $type: 'string' } },
+        ],
+      });
+
+      for (const doc of documents) {
+        const updateData: any = {};
+
+        // Vérifie et convertit chaque champ en ObjectId
+        if (doc.bureauId && typeof doc.bureauId === 'string') {
+          updateData.bureauId = new Types.ObjectId(doc.bureauId);
+        }
+        if (doc.mois && typeof doc.mois === 'string') {
+          updateData.mois = new Types.ObjectId(doc.mois);
+        }
+        if (doc.annee && typeof doc.annee === 'string') {
+          updateData.annee = new Types.ObjectId(doc.annee);
+        }
+
+        // Met à jour le document avec les nouveaux ObjectId
+        await this.weekendyModel.updateOne(
+          { _id: doc._id },
+          { $set: updateData },
+        );
+      }
+
+      return {
+        message: 'Mise à jour des champs en ObjectId terminée avec succès !',
+      };
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour des ObjectId:', error);
+      throw error;
+    }
+  }
   // modification directe
   async weekendiestockagence() {
     const weekendies = await this.weekendyModel.find().exec();
@@ -1178,22 +1245,22 @@ export class WeekendyService {
     if (!bureauId) {
       throw new Error('bureauId est requis');
     }
-  
+
     console.log('bureauId reçu:', bureauId);
-  
+
     try {
       // Conversion en ObjectId
       const objectId = new Types.ObjectId(bureauId);
-  
+
       const weekendy = await this.weekendyModel
         .find({ bureauId: objectId }) // Utilisation de l'ObjectId
         .populate('bureauId')
         // .populate('mois')
         // .populate('annee')
         .exec();
-  
+
       console.log('Données récupérées:', weekendy);
-  
+
       return weekendy;
     } catch (error) {
       console.error('Erreur lors de la récupération des week-end:', error);
@@ -1281,7 +1348,7 @@ export class WeekendyService {
   }
 
   async findOne(weekendyId: string) {
-    let products = [];
+    const products = [];
     const weekedy = await this.weekendyModel
       .findById(weekendyId)
       .populate('bureauId')
