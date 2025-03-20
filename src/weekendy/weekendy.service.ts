@@ -908,6 +908,37 @@ export class WeekendyService {
     }
   }
 
+  async updateAllData() {
+    // Récupérer toutes les données
+    const allData = await this.weekendyModel.find().exec();
+
+    if (!allData || allData.length === 0) {
+      throw new Error('Aucune donnée trouvée');
+    }
+
+    // Mettre à jour chaque document avec ObjectId
+    const updatedData = await Promise.all(
+      allData.map(async (doc) => {
+        const updatePayload = {
+          _id: new Types.ObjectId(doc._id), // Conversion _id
+          bureauId: new Types.ObjectId(doc.bureauId),
+          mois: new Types.ObjectId(doc.mois),
+          annee: new Types.ObjectId(doc.annee),
+          items: doc.items.map((item: any) => ({
+            ...item,
+            productId: new Types.ObjectId(item.productId),
+          })),
+        };
+
+        // Supprimer l'ancien document et insérer le nouveau
+        await this.weekendyModel.deleteOne({ _id: doc._id });
+        return this.weekendyModel.create(updatePayload);
+      }),
+    );
+
+    return updatedData;
+  }
+
   async convertIdToObjectId() {
     try {
       // Récupérer les documents où _id est une chaîne de caractères

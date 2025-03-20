@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { WeekendyService } from './weekendy.service';
 import { CreateWeekendyDto } from './dto/create-weekendy.dto';
 import { UpdateWeekendyDto } from './dto/update-weekendy.dto';
@@ -27,6 +27,16 @@ export class WeekendyController {
   @Get('convert-objectid')
   async convertFields() {
     return this.weekendyService.convertFieldToObjectId();
+  }
+
+  @Put('update-all')
+  async updateAllData() {
+    try {
+      const updatedData = await this.weekendyService.updateAllData();
+      return { status: 'success', data: updatedData };
+    } catch (error) {
+      return { status: 'error', message: error.message };
+    }
   }
 
   @Get('convert-id')
