@@ -1188,8 +1188,8 @@ export class WeekendyService {
       const weekendy = await this.weekendyModel
         .find({ bureauId: objectId }) // Utilisation de l'ObjectId
         .populate('bureauId')
-        .populate('mois')
-        .populate('annee')
+        // .populate('mois')
+        // .populate('annee')
         .exec();
   
       console.log('Données récupérées:', weekendy);
