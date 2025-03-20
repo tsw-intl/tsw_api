@@ -55,7 +55,7 @@ import { CommisairecontrolModule } from './commisairecontrol/commisairecontrol.m
       //`mongodb://mongo:IrtUOYAJdNRxLggDUVSRQOQOmLPQFvCF@shuttle.proxy.rlwy.net:53391`
       //mongo MONGO_INITDB_ROOT_USERNAME
       // `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_CLUSTER}.ftyqrzd.mongodb.net/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`,
-    `mongodb://mongo:IrtUOYAJdNRxLggDUVSRQOQOmLPQFvCF@shuttle.proxy.rlwy.net:53391/${process.env.MONGODB_DATABASE}?authSource=admin`,
+    `mongodb://mongo:IrtUOYAJdNRxLggDUVSRQOQOmLPQFvCF@shuttle.proxy.rlwy.net:53391/tswDB?authSource=admin`,
     ),
     // MongooseModule.forRootAsync({
     // inject: [DatabaseService],
