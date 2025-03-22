@@ -104,6 +104,8 @@ export class SalaireService {
         const managers = await this.affectationservice.findManager_bureau(
           salaire.bureauId.toString(),
         );
+
+        console.log(managers);
         const taux = await this.tauxservice.findAll();
 
         for (let i = 0; i < managers.length; i++) {
