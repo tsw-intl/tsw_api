@@ -33,7 +33,10 @@ export class SalaireService {
           managerId: managers[i].managerId,
           salaireId: createdSalairebureau._id,
           salaire_manager:
-            createSalaireDto.salaire_total_manager / managers.length,
+            (createSalaireDto.chiffreDaf *
+              taux[0].taux_salaire_agent *
+              managers.length) /
+            100,
           dette_manager: 0,
           salaire_net_manager:
             createSalaireDto.salaire_total_manager / managers.length -
@@ -110,7 +113,7 @@ export class SalaireService {
       if (managers.length > 0) {
         const tauxGarantie = taux[0]?.taux_garantie_mgr || 0;
         const salaireParManager =
-          salaire.salaire_total_manager / managers.length;
+          (salaire.chiffreDaf * taux[0].taux_salaire_mgr) / 100;
         const garantieManager = (salaireParManager * tauxGarantie) / 100;
         const salaireNetManager = salaireParManager - garantieManager;
         const createSalaireManagerDtos = managers.map((manager) => ({
