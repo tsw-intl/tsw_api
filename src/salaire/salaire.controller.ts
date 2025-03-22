@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { SalaireService } from './salaire.service';
 import { CreateSalaireDto } from './dto/create-salaire.dto';
 import { UpdateSalaireDto } from './dto/update-salaire.dto';
@@ -21,7 +29,6 @@ export class SalaireController {
   findAllCaZone() {
     return this.salaireService.findAllCa();
   }
-
 
   @Get('singlesalaire/:id')
   findOne(@Param('id') id: string) {

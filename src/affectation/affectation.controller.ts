@@ -1,11 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { AffectationService } from './affectation.service';
 import { CreateAffectationDto } from './dto/create-affectation.dto';
 import { UpdateAffectationDto } from './dto/update-affectation.dto';
 
 @Controller('affectation')
 export class AffectationController {
-  
   constructor(private readonly affectationService: AffectationService) {}
 
   @Post('newaffectation')
@@ -23,15 +30,20 @@ export class AffectationController {
     return this.affectationService.findOne(id);
   }
 
+  @Get('affectationbybureaId/:id')
+  findAffectationByBreau(@Param('id') id: string) {
+    return this.affectationService.findManager_bureau(id);
+  }
+
   @Get('manager/:id')
   findManager(@Param('id') id: string) {
     return this.affectationService.findManager(id);
   }
 
-  @Patch('updateaffectation/:id')
-  update(@Param('id') id: string, @Body() updateAffectationDto: UpdateAffectationDto) {
-    return this.affectationService.update(id, updateAffectationDto);
-  }
+  // @Patch('updateaffectation/:id')
+  // update(@Param('id') id: string, @Body() updateAffectationDto: UpdateAffectationDto) {
+  //   return this.affectationService.update(id, updateAffectationDto);
+  // }
 
   @Delete('deleteaffectation/:id')
   remove(@Param('id') id: string) {

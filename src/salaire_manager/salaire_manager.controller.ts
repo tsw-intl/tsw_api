@@ -1,8 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { SalaireManagerService } from './salaire_manager.service';
 import { CreateSalaireManagerDto } from './dto/create-salaire_manager.dto';
 import { UpdateSalaireManagerDto } from './dto/update-salaire_manager.dto';
-import { HydratedDocument, Schema as MongooseSchema  } from "mongoose";
+import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 import { UpdateDetteDto } from './dto/update-dette.dto';
 import { CreatecotisationpayDto } from './dto/create-cotisationpay.dto';
 import { DetteBureauDto } from './dto/dette_bureau.dto';
@@ -10,7 +18,6 @@ import { RemboursementDto } from './dto/remboursement.dto';
 
 @Controller('salaire-manager')
 export class SalaireManagerController {
-  
   constructor(private readonly salaireManagerService: SalaireManagerService) {}
 
   @Post('addsalaireManager')
@@ -30,7 +37,9 @@ export class SalaireManagerController {
 
   @Post('addremboursement')
   createremboursement(@Body() remboursementdto: RemboursementDto) {
-    return this.salaireManagerService.createRemboursementBureau(remboursementdto);
+    return this.salaireManagerService.createRemboursementBureau(
+      remboursementdto,
+    );
   }
 
   @Get('allremboursement/:salaireId')
@@ -40,7 +49,9 @@ export class SalaireManagerController {
 
   @Post('payecotisation')
   createCotisationpay(@Body() createcotisationpayDto: CreatecotisationpayDto) {
-    return this.salaireManagerService.createCotisationpay(createcotisationpayDto);
+    return this.salaireManagerService.createCotisationpay(
+      createcotisationpayDto,
+    );
   }
 
   @Get('allSalaireManager/:managerId')
@@ -50,9 +61,10 @@ export class SalaireManagerController {
 
   @Get('getsalairemanager/:salaireId')
   findAllManagerSalaire(@Param('salaireId') salaireId: string) {
-    return this.salaireManagerService.findAllManagersalaireBySalaireId(salaireId);
+    return this.salaireManagerService.findAllManagersalaireBySalaireId(
+      salaireId,
+    );
   }
-
 
   @Get('allCotisationManager/:managerId')
   findAllcotisatin(@Param('managerId') managerId: string) {
