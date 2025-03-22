@@ -96,45 +96,44 @@ export class SalaireService {
   async findOne(id: string) {
     const salaire = await this.salaireModel.findById(id).exec();
     if (!salaire) {
-      throw new NotFoundException('aucun salaire pour cet identifiant');
-    } else {
-      const salairemanager =
-        await this.salaireManagerservice.findAllManagersalaireBySalaireId(id);
-      if (!salairemanager) {
-        const managers = await this.affectationservice.findManager_bureau(
-          salaire.bureauId.toString(),
+      throw new NotFoundException('Aucun salaire pour cet identifiant');
+    }
+    const salaireManagers =
+      await this.salaireManagerservice.findAllManagersalaireBySalaireId(id);
+    if (!salaireManagers || salaireManagers.length === 0) {
+      // Exécuter les requêtes en parallèle
+      const [managers, taux] = await Promise.all([
+        this.affectationservice.findManager_bureau(salaire.bureauId.toString()),
+        this.tauxservice.findAll(),
+      ]);
+      if (managers.length > 0) {
+        const tauxGarantie = taux[0]?.taux_garantie_mgr || 0;
+        const salaireParManager =
+          salaire.salaire_total_manager / managers.length;
+        const garantieManager = (salaireParManager * tauxGarantie) / 100;
+        const salaireNetManager = salaireParManager - garantieManager;
+        const createSalaireManagerDtos = managers.map((manager) => ({
+          managerId: manager.managerId,
+          salaireId: salaire._id,
+          salaire_manager: salaireParManager,
+          dette_manager: 0,
+          salaire_net_manager: salaireNetManager,
+          garantie_manager: garantieManager,
+          mois: salaire.mois,
+          annee: salaire.annee,
+        }));
+
+        console.log(createSalaireManagerDtos);
+
+        await Promise.all(
+          createSalaireManagerDtos.map((dto) =>
+            this.salaireManagerservice.create(dto),
+          ),
         );
-
-        console.log(managers);
-        const taux = await this.tauxservice.findAll();
-
-        for (let i = 0; i < managers.length; i++) {
-          const createSalaireManagerDto = {
-            managerId: managers[i].managerId,
-            salaireId: salaire._id,
-            salaire_manager: salaire.salaire_total_manager / managers.length,
-            dette_manager: 0,
-            salaire_net_manager:
-              salaire.salaire_total_manager / managers.length -
-              ((salaire.salaire_total_manager / managers.length) *
-                taux[0].taux_garantie_mgr) /
-                100,
-            garantie_manager:
-              ((salaire.salaire_total_manager / managers.length) *
-                taux[0].taux_garantie_mgr) /
-              100,
-            mois: salaire.mois,
-            annee: salaire.annee,
-          };
-          console.log(createSalaireManagerDto);
-          const createsalairemanager = await this.salaireManagerservice.create(
-            createSalaireManagerDto,
-          );
-          console.log('createsalairemanager', createsalairemanager);
-        }
       }
     }
-    return await this.salaireModel
+
+    return this.salaireModel
       .findById(id)
       .populate('bureauId')
       .populate('mois')
