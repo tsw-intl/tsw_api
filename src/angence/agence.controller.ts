@@ -50,7 +50,7 @@ export class AngenceController {
 
   @Get('singleagence/:id')
   findOne(@Param('id') id: string) {
-    return this.agenceService.findOne(id);
+    return this.agenceService.findBureauById(id);
   }
 
   @Get('siegeagence/:name')
