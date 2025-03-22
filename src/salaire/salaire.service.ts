@@ -95,6 +95,7 @@ export class SalaireService {
 
   async findOne(id: string) {
     const salaire = await this.salaireModel.findById(id).exec();
+    console.log(salaire);
     if (!salaire) {
       throw new NotFoundException('Aucun salaire pour cet identifiant');
     }
@@ -122,8 +123,6 @@ export class SalaireService {
           mois: salaire.mois,
           annee: salaire.annee,
         }));
-
-        console.log(createSalaireManagerDtos);
 
         await Promise.all(
           createSalaireManagerDtos.map((dto) =>
