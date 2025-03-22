@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { WeekendyService } from './weekendy.service';
 import { CreateWeekendyDto } from './dto/create-weekendy.dto';
 import { UpdateWeekendyDto } from './dto/update-weekendy.dto';
@@ -10,7 +19,6 @@ import { SalairekineDTO } from './dto/salairedoctor.dto';
 
 @Controller('weekendy')
 export class WeekendyController {
-
   constructor(private readonly weekendyService: WeekendyService) {}
 
   @Post('newWeekendy/:id')
@@ -24,44 +32,21 @@ export class WeekendyController {
     return this.weekendyService.create(createWeekendyDto);
   }
 
-  @Get('convert-objectid')
-  async convertFields() {
-    return this.weekendyService.convertFieldToObjectId();
-  }
-
-  @Put('update-all')
-  async updateAllData() {
-    try {
-      
-      const updatedData = await this.weekendyService.updateAllData();
-      return { status: 'success', data: updatedData };
-    } catch (error) {
-      return { status: 'error', message: error.message };
-    }
-  }
-
-  @Get('convert-id')
-  async convertId() {
-    return this.weekendyService.convertIdToObjectId();
-  }
-
   @Post('newWeekendytsw')
-  createVenteDocteur(@Body() createWeekendyDto: CreateDocteurWeekendyDto){
+  createVenteDocteur(@Body() createWeekendyDto: CreateDocteurWeekendyDto) {
     // console.log(createWeekendyDto);
     createWeekendyDto.createdAt = Date();
-    
+
     return this.weekendyService.createVenteDocteur(createWeekendyDto);
   }
 
   @Get('suppressiondirecte/:bureauId')
   suppressiondirecte(@Param('bureauId') bureauId: string) {
-    
     return this.weekendyService.suppressiondirecte(bureauId);
   }
 
   @Get('allWeekendydoctor/:bureauId')
   findAllVenteDocteur(@Param('bureauId') bureauId: string) {
-    
     return this.weekendyService.findAllVenteDocteur(bureauId);
   }
 
@@ -71,7 +56,7 @@ export class WeekendyController {
   }
 
   @Get('allWeekendiesByDoctor/:doctorId')
-  findAllWeekendiesbydoctor(@Param('doctorId') doctorId: string){
+  findAllWeekendiesbydoctor(@Param('doctorId') doctorId: string) {
     return this.weekendyService.findAllVenteByDocteur(doctorId);
   }
 
@@ -82,7 +67,7 @@ export class WeekendyController {
 
   @Get('Cacombines')
   getCombinedData() {
-      return this.weekendyService.getCombinedData();
+    return this.weekendyService.getCombinedData();
   }
 
   @Get('quantities/:yearId')
@@ -90,7 +75,6 @@ export class WeekendyController {
     return await this.weekendyService.getGroupedQuantitiesByYear(yearId);
   }
 
-  
   // @Get('allWeekendiesForstock')
   // findWeekendiesForstock() {
   //   return this.weekendyService.weekendiestockagence();
@@ -102,13 +86,13 @@ export class WeekendyController {
   // }
   @Post('allventepays')
   allGetAllProduitVendyPays(@Body() query: QueryDto) {
-    console.log('query',query);
+    console.log('query', query);
     return this.weekendyService.allGetAllProduitVendyPays(query);
   }
 
   @Post('createsalairedoctor')
   createSalaireDoctor(@Body() query: SalairekineDTO) {
-    console.log('query',query);
+    console.log('query', query);
     return this.weekendyService.createSalaireDoctor(query);
   }
 
@@ -118,10 +102,9 @@ export class WeekendyController {
   }
 
   @Get('findSingleSalaireByDocteur/:id')
-  singleSalaryDoctor(@Param('id') id: string){
-    return this.weekendyService.findSigleDoctorSalary(id)
+  singleSalaryDoctor(@Param('id') id: string) {
+    return this.weekendyService.findSigleDoctorSalary(id);
   }
-
 
   @Get('singleWeekendy/:id')
   findOne(@Param('id') id: string) {
@@ -134,7 +117,10 @@ export class WeekendyController {
   }
 
   @Patch('updateWeekendy/:id')
-  update(@Param('id') id: string, @Body() updateWeekendyDto: UpdateWeekendyDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateWeekendyDto: UpdateWeekendyDto,
+  ) {
     return this.weekendyService.update(id, updateWeekendyDto);
   }
 

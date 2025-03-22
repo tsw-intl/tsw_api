@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ProduitendommageService } from './produitendommage.service';
 import { UpdateProduitendommageDto } from './dto/update-produitendommage.dto';
 import { CreateProduitendommageDto } from './dto/create-produitendommage.dto copy';
@@ -6,17 +14,22 @@ import { CreateVenteProduitendommageDto } from './dto/create-venteproduitendomma
 
 @Controller('produitendommage')
 export class ProduitendommageController {
-  constructor(private readonly produitendommageService: ProduitendommageService) {}
- 
+  constructor(
+    private readonly produitendommageService: ProduitendommageService,
+  ) {}
+
   @Post('saveendoproduit')
   create(@Body() createProduitendommageDto: CreateProduitendommageDto) {
     return this.produitendommageService.create(createProduitendommageDto);
   }
 
-  
   @Post('venteEndoproduit')
-  venteEndoproduit(@Body() createventeProduitendommageDto: CreateVenteProduitendommageDto) {
-    return this.produitendommageService.createvente(createventeProduitendommageDto);
+  venteEndoproduit(
+    @Body() createventeProduitendommageDto: CreateVenteProduitendommageDto,
+  ) {
+    return this.produitendommageService.createvente(
+      createventeProduitendommageDto,
+    );
   }
 
   @Get('allendoproduit')
@@ -40,7 +53,10 @@ export class ProduitendommageController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProduitendommageDto: UpdateProduitendommageDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateProduitendommageDto: UpdateProduitendommageDto,
+  ) {
     return this.produitendommageService.update(id, updateProduitendommageDto);
   }
 

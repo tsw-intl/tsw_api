@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CreateAgenceDto } from './dto/create-agence.dto';
 import { UpdateAgenceDto } from './dto/update-agence.dto';
 import { AgenceService } from './agence.service';
@@ -8,7 +16,6 @@ import { UpdateAgenceLocationDto } from './dto/update-agence-location.dto';
 
 @Controller('agence')
 export class AngenceController {
-  
   constructor(private readonly agenceService: AgenceService) {}
 
   @Post('newagence')
@@ -52,7 +59,10 @@ export class AngenceController {
   }
 
   @Patch('updadeagence/:bureauid')
-  update(@Param('bureauid') bureauid: string, @Body() updateAgenceDto: UpdateAgenceDto) {
+  update(
+    @Param('bureauid') bureauid: string,
+    @Body() updateAgenceDto: UpdateAgenceDto,
+  ) {
     return this.agenceService.update(bureauid, updateAgenceDto);
   }
 
@@ -62,7 +72,9 @@ export class AngenceController {
   }
 
   @Post('newAgenceLocation')
-  createAgenceLocation(@Body() createAgenceLocationDto: CreateAgenceLocationDto) {
+  createAgenceLocation(
+    @Body() createAgenceLocationDto: CreateAgenceLocationDto,
+  ) {
     return this.agenceService.createAngenceLocation(createAgenceLocationDto);
   }
 
@@ -72,8 +84,14 @@ export class AngenceController {
   }
 
   @Patch('updadeagencelocation/:bureaulocationid')
-  updateagencelocation(@Param('bureaulocationid') bureaulocationid: string, @Body() updateAgencelocationDto: UpdateAgenceLocationDto) {
-    return this.agenceService.updateagencelocation(bureaulocationid, updateAgencelocationDto);
+  updateagencelocation(
+    @Param('bureaulocationid') bureaulocationid: string,
+    @Body() updateAgencelocationDto: UpdateAgenceLocationDto,
+  ) {
+    return this.agenceService.updateagencelocation(
+      bureaulocationid,
+      updateAgencelocationDto,
+    );
   }
 
   @Delete('deleteagencelocation/:id')
@@ -85,5 +103,4 @@ export class AngenceController {
   findAllAgenceLocation() {
     return this.agenceService.findAllAgenceLocation();
   }
-
 }

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MouvementstockService } from './mouvementstock.service';
 import { CreateMouvementstockDto } from './dto/create-mouvementstock.dto';
 import { UpdateMouvementstockDto } from './dto/update-mouvementstock.dto';
@@ -27,13 +35,11 @@ export class MouvementstockController {
     return this.mouvementstockService.selectmvtstockbureau(id);
   }
 
-  @Get('singlemvtstock/:id')
-  findOne(@Param('id') id: string) {
-    return this.mouvementstockService.findOne(id);
-  }
-
   @Patch('updatemvtstock/:id')
-  update(@Param('id') id: string, @Body() updateMouvementstockDto: UpdateMouvementstockDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateMouvementstockDto: UpdateMouvementstockDto,
+  ) {
     return this.mouvementstockService.update(id, updateMouvementstockDto);
   }
 

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { BackupService } from './backup.service';
 import { CreateBackupDto } from './dto/create-backup.dto';
 import { UpdateBackupDto } from './dto/update-backup.dto';
@@ -10,13 +18,11 @@ export class BackupController {
   @Get('manualold')
   async manualBackup() {
     return await this.backupService.processDataAndSendEmail();
-    
   }
 
   @Get('manual')
   async groupBackup() {
     return await this.backupService.backupdata();
-    
   }
 
   @Post('sendMail')

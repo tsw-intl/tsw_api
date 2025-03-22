@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
-export class QueryDto {
+export class ReuestDto {
   @ApiProperty({ required: true })
   @IsNotEmpty()
-  paysId: string;
+  mois: string;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
-  anneeId: string;
+  annee: string;
 }
