@@ -114,32 +114,24 @@ export class AgenceService {
       .findById(bureauId)
       .populate('countryId')
       .exec();
-    // console.log(findagence);
+
     if (!findagence) {
-      throw new NotFoundException('agence non trouvée');
-    } else {
-      if (findagence.zoneId == '' && findagence.sectionId == '') {
-        return { findagence, zone: '', section: '' };
-      } else if (findagence.zoneId == '' && findagence.sectionId != '') {
-        const section = await this.sectionService.findOne(findagence.sectionId);
-        return { findagence, section, zone: '' };
-      } else if (findagence.zoneId != '' && findagence.sectionId == '') {
-        const zone = await this.zoneService.findOneZonebyId(findagence.zoneId);
-        return {
-          findagence,
-          zone,
-          section: '',
-        };
-      } else {
-        const zone = await this.zoneService.findOneZonebyId(findagence.zoneId);
-        const section = await this.sectionService.findOne(findagence.sectionId);
-        return {
-          findagence,
-          zone,
-          section,
-        };
-      }
+      throw new NotFoundException('Agence non trouvée');
     }
+
+    const section = findagence.sectionId
+      ? await this.sectionService.findOne(findagence.sectionId.toString())
+      : null;
+
+    const zone = findagence.zoneId
+      ? await this.zoneService.findOneZonebyId(findagence.zoneId.toString())
+      : null;
+
+    return {
+      findagence,
+      zone: zone || '',
+      section: section || '',
+    };
   }
 
   async findbureau(bureauId: string) {
