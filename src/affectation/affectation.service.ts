@@ -118,9 +118,9 @@ export class AffectationService {
     return managers;
   }
 
-  update(id: string, updateAffectationDto: UpdateAffectationDto) {
-    return `This action updates a #${id} affectation`;
-  }
+  // update(id: string, updateAffectationDto: UpdateAffectationDto) {
+  //   return `This action updates a #${id} affectation`;
+  // }
 
   async remove(id: string) {
     const affectation = await this.affectationModel.findById(id);
