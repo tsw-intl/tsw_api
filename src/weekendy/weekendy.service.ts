@@ -1539,4 +1539,103 @@ export class WeekendyService {
       .populate('mois')
       .exec();
   }
+
+  async calculerCaTotalParPays(anneeId: string, paysId: string) {
+    const agences = await this.agenceservice.findAgencesPays(paysId);
+    if (!agences.length) {
+      throw new NotFoundException(
+        `Aucune agence trouvée pour le pays ${paysId}`,
+      );
+    }
+
+    const agenceIds = agences.map((agence) => agence._id);
+
+    const weekendies = await this.weekendyModel
+      .find({ annee: anneeId, bureauId: { $in: agenceIds } })
+      .exec();
+
+    // 4️⃣ Récupérer les WeekendyDocteur liés aux agences du pays pour l'année donnée
+    const weekendiesDocteur = await this.weekendyDocteurModel
+      .find({ annee: anneeId, bureauId: { $in: agenceIds } })
+      .exec();
+
+    // 5️⃣ Calculer la somme totale des caTotal pour Weekendy
+    const totalCaWeekendy = weekendies.reduce(
+      (sum, weekendy) => sum + (weekendy.caTotal || 0),
+      0,
+    );
+
+    // 6️⃣ Calculer la somme totale des caTotal pour WeekendyDocteur
+    const totalCaWeekendyDocteur = weekendiesDocteur.reduce(
+      (sum, weekendyDocteur) => sum + (weekendyDocteur.caTotal || 0),
+      0,
+    );
+
+    // 7️⃣ Calculer le total général des deux tables
+    const totalCa = totalCaWeekendy + totalCaWeekendyDocteur;
+
+    await this.payscaservice.updateCaannee(anneeId, paysId, totalCa);
+
+    const allRecords = await this.payscaservice.findAllPaysCa();
+
+    return allRecords;
+  }
+
+  async calculerCaTotalParMois(
+    anneeId: string,
+    moisId: string,
+    paysId: string,
+  ) {
+    // 1️⃣ Récupérer toutes les agences du pays
+    const agences = await this.agenceservice.findAgencesPays(paysId);
+    if (!agences.length) {
+      throw new NotFoundException(
+        `Aucune agence trouvée pour le pays ${paysId}`,
+      );
+    }
+
+    // 2️⃣ Extraire les IDs des agences
+    const agenceIds = agences.map((agence) => agence._id);
+
+    // 3️⃣ Récupérer les Weekendy liés aux agences du pays pour l'année et le mois donné
+    const weekendies = await this.weekendyModel
+      .find({ annee: anneeId, mois: moisId, bureauId: { $in: agenceIds } })
+      .exec();
+
+    // 4️⃣ Récupérer les WeekendyDocteur liés aux agences du pays pour l'année et le mois donné
+    const weekendiesDocteur = await this.weekendyDocteurModel
+      .find({ annee: anneeId, mois: moisId, bureauId: { $in: agenceIds } })
+      .exec();
+
+    // 5️⃣ Calculer la somme totale des caTotal pour Weekendy
+    const totalCaWeekendy = weekendies.reduce(
+      (sum, weekendy) => sum + (weekendy.caTotal || 0),
+      0,
+    );
+
+    // 6️⃣ Calculer la somme totale des caTotal pour WeekendyDocteur
+    const totalCaWeekendyDocteur = weekendiesDocteur.reduce(
+      (sum, weekendyDocteur) => sum + (weekendyDocteur.caTotal || 0),
+      0,
+    );
+
+    // 7️⃣ Calculer le total général des deux tables
+    const totalCa = totalCaWeekendy + totalCaWeekendyDocteur;
+
+    console.log(
+      `Total CA pour l'année ${anneeId}, le mois ${moisId} et le pays ${paysId}: ${totalCa}`,
+    );
+
+    // 5️⃣ Mise à jour ou création en une seule requête
+    await this.payscaservice.updateCamoisannee(
+      anneeId,
+      moisId,
+      paysId,
+      totalCa,
+    );
+
+    // 6️⃣ Afficher tous les enregistrements dans la table 'paysca' après le calcul
+    const allRecords = await this.payscaservice.findAllPaysCa(); // Cette méthode récupère toutes les entrées de la table paysca
+    return allRecords;
+  }
 }

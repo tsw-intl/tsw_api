@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { PayscaService } from './paysca.service';
 import { CreatePayscaDto } from './dto/create-paysca.dto';
 import { UpdatePayscaDto } from './dto/update-paysca.dto';
@@ -24,7 +32,6 @@ export class PayscaController {
     return this.payscaService.updateCaPaysMoisDirect(id, query);
   }
 
-
   @Get('allCapaysmois/:id')
   findAllMois(@Param('id') id: string) {
     return this.payscaService.findPaysCamois(id);
@@ -46,7 +53,10 @@ export class PayscaController {
   }
 
   @Patch(':id')
-  updateyear(@Param('id') id: string, @Body() updatePayscaDto: UpdatePayscaDto) {
+  updateyear(
+    @Param('id') id: string,
+    @Body() updatePayscaDto: UpdatePayscaDto,
+  ) {
     return this.payscaService.updateyear(id, updatePayscaDto);
   }
 
@@ -61,11 +71,14 @@ export class PayscaController {
   }
 
   @Post('capaysmoisannee')
-  findOneCaPaysMoisAnnee(@Body() getterCaPaysMoisAnneedto: GetterCaPaysMoisAnneeDTO){
+  findOneCaPaysMoisAnnee(
+    @Body() getterCaPaysMoisAnneedto: GetterCaPaysMoisAnneeDTO,
+  ) {
     console.log(getterCaPaysMoisAnneedto);
-    return this.payscaService.findOnePaysCamoisExist(getterCaPaysMoisAnneedto.countryId, getterCaPaysMoisAnneedto.mois, getterCaPaysMoisAnneedto.annee);
-
+    return this.payscaService.findOnePaysCamoisExist(
+      getterCaPaysMoisAnneedto.countryId,
+      getterCaPaysMoisAnneedto.mois,
+      getterCaPaysMoisAnneedto.annee,
+    );
   }
-
-  
 }

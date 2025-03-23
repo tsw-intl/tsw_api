@@ -34,7 +34,7 @@ export class SalaireService {
           salaireId: createdSalairebureau._id,
           salaire_manager:
             (createSalaireDto.chiffreDaf *
-              taux[0].taux_salaire_agent *
+              taux[0].taux_salaire_mgr *
               managers.length) /
             100,
           dette_manager: 0,
@@ -98,7 +98,6 @@ export class SalaireService {
 
   async findOne(id: string) {
     const salaire = await this.salaireModel.findById(id).exec();
-    console.log(salaire);
     if (!salaire) {
       throw new NotFoundException('Aucun salaire pour cet identifiant');
     }

@@ -167,6 +167,11 @@ export class AgenceService {
     return agence;
   }
 
+  async findAgencesPays(paysId: string) {
+    const agence = await this.agenceModel.find({ countryId: paysId }).exec();
+    return agence;
+  }
+
   // async update(bureauId: string, updateAgenceDto: UpdateAgenceDto) {
   //   console.log(updateAgenceDto);
   //   if(updateAgenceDto.sectionId ==''){

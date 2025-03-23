@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Put,
+  Query,
 } from '@nestjs/common';
 import { WeekendyService } from './weekendy.service';
 import { CreateWeekendyDto } from './dto/create-weekendy.dto';
@@ -127,5 +128,23 @@ export class WeekendyController {
   @Delete('deleteWeekendy/:id')
   remove(@Param('id') id: string) {
     return this.weekendyService.remove(id);
+  }
+
+  @Get('ca-pays-par-annee')
+  CaPaysAnnee(
+    @Query('anneeId') anneeId: string,
+    @Query('paysId') paysId: string,
+  ) {
+    return this.weekendyService.calculerCaTotalParPays(anneeId, paysId);
+  }
+
+  @Get('ca-pays-par-mois')
+  async CaPaysMois(
+    @Query('anneeId') anneeId: string,
+    @Query('moisId') moisId: string,
+    @Query('paysId') paysId: string,
+  ) {
+    await this.weekendyService.calculerCaTotalParMois(anneeId, moisId, paysId);
+    return { message: 'Calcul du CA mensuel terminé !' };
   }
 }
