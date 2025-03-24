@@ -34,9 +34,7 @@ export class SalaireService {
           salaireId: createdSalairebureau._id,
           salaire_manager:
             (createSalaireDto.chiffreDaf *
-              taux[0].taux_salaire_mgr *
-              managers.length) /
-            100,
+              taux[0].taux_salaire_mgr / 100),
           dette_manager: 0,
           salaire_net_manager:
             createSalaireDto.salaire_total_manager / managers.length -
