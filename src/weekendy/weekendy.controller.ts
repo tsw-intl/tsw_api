@@ -76,10 +76,10 @@ export class WeekendyController {
     return await this.weekendyService.getGroupedQuantitiesByYear(yearId);
   }
 
-  // @Get('allWeekendiesForstock')
-  // findWeekendiesForstock() {
-  //   return this.weekendyService.weekendiestockagence();
-  // }
+  @Get('allWeekendiesbackup')
+  findWeekendiesForstock() {
+    return this.weekendyService.weekendybackup();
+  }
 
   // @Get('allWeekendies')
   // findWeekendies() {
