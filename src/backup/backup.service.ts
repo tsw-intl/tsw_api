@@ -46,6 +46,9 @@ const execAsync = util.promisify(exec);
 
 @Injectable()
 export class BackupService {
+  private mongoUri =
+    'mongodb://mongo:IrtUOYAJdNRxLggDUVSRQOQOmLPQFvCF@shuttle.proxy.rlwy.net:53391/tswDB?authSource=admin';
+
   constructor(
     private readonly mailerService: MailerService,
     private readonly mailService: MailService,
@@ -277,7 +280,7 @@ export class BackupService {
   }
 
   async createBackup(): Promise<string> {
-    const mongoUri = process.env.MONGO_URI;
+    const mongoUri = this.mongoUri;
     if (!mongoUri) {
       throw new Error('MONGO_URI is not defined in environment variables.');
     }
