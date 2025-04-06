@@ -284,16 +284,31 @@ export class BackupService {
     if (!mongoUri) {
       throw new Error('MONGO_URI is not defined in environment variables.');
     }
-    // Vérifier que les éléments du chemin sont définis avant de les utiliser
-    const dumpDir = path.join(__dirname, '..', '..', 'dumps');
-    console.log('dumpDir:', dumpDir); // Vérifier la valeur de dumpDir
+
+    // Vérification de __dirname
+    if (typeof __dirname === 'undefined') {
+      console.error('__dirname is undefined');
+      throw new Error('__dirname is undefined');
+    }
+
+    // Construction manuelle du répertoire dump
+    const dumpDir = __dirname + '/../../dumps';
+    console.log('dumpDir:', dumpDir); // Afficher le chemin pour vérifier sa validité
+
     if (!fs.existsSync(dumpDir)) {
+      console.log(`Création du répertoire: ${dumpDir}`);
       fs.mkdirSync(dumpDir, { recursive: true });
     }
+
+    // Générer un nom de fichier unique
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const outputPath = path.join(dumpDir, `mongo-backup-${timestamp}.gz`);
-    console.log('outputPath:', outputPath); // Vérifier la valeur du chemin de sortie
+    const outputPath = dumpDir + '/mongo-backup-' + timestamp + '.gz';
+
+    console.log('outputPath:', outputPath); // Afficher le chemin de sortie
+
+    // Commande mongodump
     const command = `mongodump --uri="${mongoUri}" --archive="${outputPath}" --gzip`;
+
     try {
       await execAsync(command);
       return outputPath;
