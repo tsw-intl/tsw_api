@@ -39,8 +39,10 @@ import { UserService } from 'src/user/user.service';
 import { WeekendyService } from 'src/weekendy/weekendy.service';
 import { ZoneService } from 'src/zone/zone.service';
 import { MailService } from './mail.service';
+import path from 'path';
 
 const exec = util.promisify(childProcess.exec);
+const execAsync = util.promisify(exec);
 
 @Injectable()
 export class BackupService {
@@ -272,5 +274,33 @@ export class BackupService {
       agences,
       affectations,
     };
+  }
+
+  async createBackup(): Promise<string> {
+    const mongoUri = process.env.MONGO_URI;
+    if (!mongoUri) {
+      throw new Error('MONGO_URI is not defined in environment variables.');
+    }
+
+    // Dossier pour les dumps
+    const dumpDir = path.join(__dirname, '..', '..', 'dumps');
+    if (!fs.existsSync(dumpDir)) {
+      fs.mkdirSync(dumpDir);
+    }
+
+    // Générer un nom de fichier unique
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const outputPath = path.join(dumpDir, `mongo-backup-${timestamp}.gz`);
+
+    // Commande mongodump
+    const command = `mongodump --uri="${mongoUri}" --archive="${outputPath}" --gzip`;
+
+    try {
+      await execAsync(command);
+      return outputPath;
+    } catch (error) {
+      console.error('Erreur lors du mongodump:', error);
+      throw new Error('Backup failed');
+    }
   }
 }
