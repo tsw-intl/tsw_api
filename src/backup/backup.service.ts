@@ -285,7 +285,6 @@ export class BackupService {
       throw new Error('MONGO_URI is not defined in environment variables.');
     }
 
-    // Dossier pour les dumps
     const dumpDir = path.join(__dirname, '..', '..', 'dumps');
     if (!fs.existsSync(dumpDir)) {
       fs.mkdirSync(dumpDir);
