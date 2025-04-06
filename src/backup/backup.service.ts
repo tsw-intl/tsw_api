@@ -144,78 +144,125 @@ export class BackupService {
   }
 
   async backupdata() {
-    const contisation = await this.salairemanagerService.cotisationbackup();
-    const contisationpaye =
-      await this.salairemanagerService.cotisationpayebackup();
-    const salairemanager =
-      await this.salairemanagerService.salairemanagerbackup();
-    const dettebureau = await this.salairemanagerService.dettebureaubackup();
-    const remboursement =
-      await this.salairemanagerService.remboursementbackup();
-    const section = await this.sectionservice.sectionbackup();
-    const chefsectionprime = await this.sectionservice.chefsectionprimebackup();
-    const sectionca = await this.sectionservice.sectioncabackup();
-    const sectioncamois = await this.sectionservice.sectioncamoisbackup();
-    const stock = await this.stockService.stockbackup();
-    const stockpay = await this.stockPaysService.stockpaybackup();
-    const stockagence = await this.stockagenceService.stockagencebackup();
-    const superviseurzone =
-      await this.superviseurzoneService.superviserzonebackup();
-    const taux = await this.tauxservice.tauxbackup();
-    const tauxzone = await this.tauxzoneservice.tauzonebackup();
-    const tauxsection = await this.tauxzoneservice.tausectionbackup();
-    const users = await this.userService.userbackup();
-    const weekendies = await this.weekendyservice.weekendybackup();
-    const zones = await this.zoneservice.zonebackup();
-    const salaire = await this.salaireService.salairebackup();
-    const roles = await this.roleService.rolebackup();
-    const produits = await this.produitService.productsbackup();
-    const produitendommages =
-      await this.produitendommageService.produitendommagesbackup();
-    const produitendommagesvendus =
-      await this.produitendommageService.produitendovendubackup();
-    const produitendommagesstock =
-      await this.produitendommageService.stockproduitendo();
-    const patients = await this.patientService.patientbackup();
-    const patientsdocteur = await this.patientService.patientdocteurbackup();
-    const patientskine = await this.patientService.patientkinebackup();
-    const caissekine = await this.patientService.caissekinebackup();
-    const soldecaissekine = await this.patientService.caissekinesoldebackup();
-    const caissemachine = await this.patientService.caissemachinebackup();
-    const caissemachinesolde =
-      await this.patientService.caissemachinesoldebackup();
-    const caissecarnet = await this.patientService.caissecarnetbackup();
-    const caissecarnetsolde =
-      await this.patientService.caissecarnetsoldebackup();
-    const demande = await this.patientService.demandebackup();
-    const seance = await this.patientService.seancebackup();
-    const pays = await this.paysService.paysbackup();
-    const paysca = await this.payscaservice.findAllCabackup();
-    const missions = await this.assignmentService.missionbackup();
-
-    const mvtstockpaysentrepot = await this.mvtStockService.mvtstockbackup();
-
-    const mouvementstockpaysbureau =
-      await this.mouvementstockservice.mouvementstockbackup();
-    const consignation = await this.mouvementstockservice.consignationbackup();
-    const annee = await this.moisannesservice.anneebackup();
-    const mois = await this.moisannesservice.moisbackup();
-    const managers = await this.managerservice.managersbackup();
-    const caisse = await this.caisseService.caissebackup();
-    const expenses = await this.expenseservice.expensesbackup();
-    const categories = await this.expenseservice.categoriesbackup();
-    const entrepot = await this.entrepotservice.entrepotbackup();
-    const chefsections = await this.chefsectionService.chefsectionbackup();
-    const operationentrepot =
-      await this.entrepotservice.operationentrepotbackup();
-    const stockentrepot = await this.entrepotservice.entrepotstockbackup();
-    const sortieentrepot = await this.entrepotservice.sortieentrepotbackup();
-    const stockalertentrepot = await this.entrepotservice.stockalertbackup();
-    const employer = await this.employerservice.employerbackup();
-    const conges = await this.congesservice.congebackup();
-    const agences = await this.agenceservice.bureaubackup();
-    const affectations = await this.affectationservice.affectationbackup();
-    // console.log(collectionNames.length)
+    const [
+      contisation,
+      contisationpaye,
+      salairemanager,
+      dettebureau,
+      remboursement,
+      section,
+      chefsectionprime,
+      sectionca,
+      sectioncamois,
+      stock,
+      stockpay,
+      stockagence,
+      superviseurzone,
+      taux,
+      tauxzone,
+      tauxsection,
+      users,
+      weekendies,
+      zones,
+      salaire,
+      roles,
+      produits,
+      produitendommages,
+      produitendommagesvendus,
+      produitendommagesstock,
+      patients,
+      patientsdocteur,
+      patientskine,
+      caissekine,
+      soldecaissekine,
+      caissemachine,
+      caissemachinesolde,
+      caissecarnet,
+      caissecarnetsolde,
+      demande,
+      seance,
+      pays,
+      paysca,
+      missions,
+      mvtstockpaysentrepot,
+      mouvementstockpaysbureau,
+      consignation,
+      annee,
+      mois,
+      managers,
+      caisse,
+      expenses,
+      categories,
+      entrepot,
+      chefsections,
+      operationentrepot,
+      stockentrepot,
+      sortieentrepot,
+      stockalertentrepot,
+      employer,
+      conges,
+      agences,
+      affectations,
+    ] = await Promise.all([
+      this.salairemanagerService.cotisationbackup(),
+      this.salairemanagerService.cotisationpayebackup(),
+      this.salairemanagerService.salairemanagerbackup(),
+      this.salairemanagerService.dettebureaubackup(),
+      this.salairemanagerService.remboursementbackup(),
+      this.sectionservice.sectionbackup(),
+      this.sectionservice.chefsectionprimebackup(),
+      this.sectionservice.sectioncabackup(),
+      this.sectionservice.sectioncamoisbackup(),
+      this.stockService.stockbackup(),
+      this.stockPaysService.stockpaybackup(),
+      this.stockagenceService.stockagencebackup(),
+      this.superviseurzoneService.superviserzonebackup(),
+      this.tauxservice.tauxbackup(),
+      this.tauxzoneservice.tauzonebackup(),
+      this.tauxzoneservice.tausectionbackup(),
+      this.userService.userbackup(),
+      this.weekendyservice.weekendybackup(),
+      this.zoneservice.zonebackup(),
+      this.salaireService.salairebackup(),
+      this.roleService.rolebackup(),
+      this.produitService.productsbackup(),
+      this.produitendommageService.produitendommagesbackup(),
+      this.produitendommageService.produitendovendubackup(),
+      this.produitendommageService.stockproduitendo(),
+      this.patientService.patientbackup(),
+      this.patientService.patientdocteurbackup(),
+      this.patientService.patientkinebackup(),
+      this.patientService.caissekinebackup(),
+      this.patientService.caissekinesoldebackup(),
+      this.patientService.caissemachinebackup(),
+      this.patientService.caissemachinesoldebackup(),
+      this.patientService.caissecarnetbackup(),
+      this.patientService.caissecarnetsoldebackup(),
+      this.patientService.demandebackup(),
+      this.patientService.seancebackup(),
+      this.paysService.paysbackup(),
+      this.payscaservice.findAllCabackup(),
+      this.assignmentService.missionbackup(),
+      this.mvtStockService.mvtstockbackup(),
+      this.mouvementstockservice.mouvementstockbackup(),
+      this.mouvementstockservice.consignationbackup(),
+      this.moisannesservice.anneebackup(),
+      this.moisannesservice.moisbackup(),
+      this.managerservice.managersbackup(),
+      this.caisseService.caissebackup(),
+      this.expenseservice.expensesbackup(),
+      this.expenseservice.categoriesbackup(),
+      this.entrepotservice.entrepotbackup(),
+      this.chefsectionService.chefsectionbackup(),
+      this.entrepotservice.operationentrepotbackup(),
+      this.entrepotservice.entrepotstockbackup(),
+      this.entrepotservice.sortieentrepotbackup(),
+      this.entrepotservice.stockalertbackup(),
+      this.employerservice.employerbackup(),
+      this.congesservice.congebackup(),
+      this.agenceservice.bureaubackup(),
+      this.affectationservice.affectationbackup(),
+    ]);
 
     return {
       contisation,
