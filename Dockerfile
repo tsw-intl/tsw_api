@@ -1,28 +1,35 @@
-# Étape 1 : Build NestJS
-FROM node:18-alpine AS builder
+# Stage 1: Development
+FROM node:alpine AS development
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 COPY package*.json ./
-RUN npm install --legacy-peer-deps
+
+# Installez les dépendances pour le développement, y compris mongodb-clients pour mongodump
+RUN apk --no-cache add mongodb-tools \
+    && npm install --only=development
 
 COPY . .
+
+RUN ls -la  # Ajoutez cette ligne pour afficher le contenu du répertoire de travail
+
+# Build the application
 RUN npm run build
 
-# Étape 2 : Image de production + mongodump
-FROM node:18-alpine
+# Stage 2: Production
+FROM node:alpine as production
 
-# Installation de mongodump via mongodb-tools
-RUN apk add --no-cache mongodb-tools
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package*.json ./
+COPY package*.json ./
 
-# Utilisation de npm ci pour une installation rapide et fiable
-RUN npm ci --only=production
+# Installez seulement les dépendances de production
+RUN npm install --only=prod
 
-ENV NODE_ENV=production
+# Copiez les fichiers construits à partir de la phase de développement
+COPY --from=development /usr/src/app/dist ./dist
 
 CMD ["node", "dist/main"]
