@@ -284,19 +284,16 @@ export class BackupService {
     if (!mongoUri) {
       throw new Error('MONGO_URI is not defined in environment variables.');
     }
-
+    // Vérifier que les éléments du chemin sont définis avant de les utiliser
     const dumpDir = path.join(__dirname, '..', '..', 'dumps');
+    console.log('dumpDir:', dumpDir); // Vérifier la valeur de dumpDir
     if (!fs.existsSync(dumpDir)) {
-      fs.mkdirSync(dumpDir);
+      fs.mkdirSync(dumpDir, { recursive: true });
     }
-
-    // Générer un nom de fichier unique
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const outputPath = path.join(dumpDir, `mongo-backup-${timestamp}.gz`);
-
-    // Commande mongodump
+    console.log('outputPath:', outputPath); // Vérifier la valeur du chemin de sortie
     const command = `mongodump --uri="${mongoUri}" --archive="${outputPath}" --gzip`;
-
     try {
       await execAsync(command);
       return outputPath;
