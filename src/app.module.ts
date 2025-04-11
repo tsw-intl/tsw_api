@@ -50,8 +50,11 @@ import { CommisairecontrolModule } from './commisairecontrol/commisairecontrol.m
       load: configs,
       isGlobal: true,
     }),
+    // MongooseModule.forRoot(
+    //   `mongodb://mongo:IrtUOYAJdNRxLggDUVSRQOQOmLPQFvCF@shuttle.proxy.rlwy.net:53391/tswDB?authSource=admin`,
+    // ),
     MongooseModule.forRoot(
-      `mongodb://mongo:IrtUOYAJdNRxLggDUVSRQOQOmLPQFvCF@shuttle.proxy.rlwy.net:53391/tswDB?authSource=admin`,
+      'mongodb://mongo:IrtUOYAJdNRxLggDUVSRQOQOmLPQFvCF@mongodb.railway.internal:53391/tswDB?authSource=admin',
     ),
     // MongooseModule.forRootAsync({
     // inject: [DatabaseService],
