@@ -50,9 +50,9 @@ import { CommisairecontrolModule } from './commisairecontrol/commisairecontrol.m
       load: configs,
       isGlobal: true,
     }),
-    MongooseModule.forRoot(
-      `mongodb://mongo:IrtUOYAJdNRxLggDUVSRQOQOmLPQFvCF@shuttle.proxy.rlwy.net:53391/tswDB?authSource=admin`,
-    ),
+    // MongooseModule.forRoot(
+    //   `mongodb://mongo:IrtUOYAJdNRxLggDUVSRQOQOmLPQFvCF@shuttle.proxy.rlwy.net:53391/tswDB?authSource=admin`,
+    // ),
     // MongooseModule.forRoot(
     //   'mongodb://mongo:IrtUOYAJdNRxLggDUVSRQOQOmLPQFvCF@mongodb.railway.internal:53391/tswDB?authSource=admin',
     // ),
@@ -61,6 +61,13 @@ import { CommisairecontrolModule } from './commisairecontrol/commisairecontrol.m
     // imports: [DatabaseModule],
     // useFactory: (databaseService: DatabaseService) => databaseService.createMongooseOptions(),
     // }),
+    // mongodb://${{MONGO_INITDB_ROOT_USERNAME}}:${{MONGO_INITDB_ROOT_PASSWORD}}@${{RAILWAY_PRIVATE_DOMAIN}}:27017
+
+    MongooseModule.forRoot(
+      // `mongodb://mongo:bhHE2GE2FBG-cb-CH2-16fGg5b4C3Hbf@monorail.proxy.rlwy.net:24357`,32188
+      // `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_CLUSTER}.ftyqrzd.mongodb.net/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`,
+      `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@${process.env.RAILWAY_PRIVATE_DOMAIN}:27017/tswDB?authSource=admin`,
+    ),
     UserModule,
     ManagerModule,
     ProduitModule,
